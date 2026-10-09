@@ -1,0 +1,26 @@
+import React, { useMemo, useState } from 'react';
+import { FlatList, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useLibrary } from '../state/LibraryContext.jsx';
+
+export default function CatalogScreen({ navigation }) {
+  const [query, setQuery] = useState('');
+  const [category, setCategory] = useState('All genres');
+  const [showGenres, setShowGenres] = useState(false);
+  const [sortOrder, setSortOrder] = useState('title');
+  const { books, genres } = useLibrary();
+  const filtered = useMemo(() => books.filter((book) => {
+    const text = query.trim().toLowerCase();
+    return (category === 'All genres' || book.category === category)
+      && (!text || book.title.toLowerCase().includes(text));
+  }).sort((left, right) => sortOrder === 'author-sort'
+    ? left.author.localeCompare(right.author)
+    : sortOrder === 'reverse'
+      ? right.title.localeCompare(left.title)
+      : left.title.localeCompare(right.title)), [query, category, sortOrder, books]);
+  const genreFilters = ['All genres', ...genres];
+  const cycleSort = () => setSortOrder((current) => current === 'title' ? 'reverse' : current === 'reverse' ? 'author-sort' : 'title');
+  const sortLabel = sortOrder === 'title' ? 'Alphabetical (A-Z)' : sortOrder === 'reverse' ? 'Reverse alphabetical (Z-A)' : 'Sort by author';
+  return <SafeAreaView style={styles.container}><FlatList data={filtered} keyExtractor={(item) => item.id} contentContainerStyle={styles.content} renderItem={({ item }) => <Pressable style={styles.book} onPress={() => navigation.navigate('BorrowReturn', { book: item })}><View style={[styles.cover, { backgroundColor: item.accent }]}><Text style={styles.coverTitle}>{item.title}</Text></View><View style={styles.bookInfo}><Text style={styles.bookTitle}>{item.title}</Text><Text style={styles.author}>{item.author}</Text><Text style={styles.category}>{item.category}</Text><Text style={item.copies ? styles.available : styles.unavailable}>{item.copies ? `${item.copies} copies available` : 'Currently unavailable'}</Text></View></Pressable>} ListHeaderComponent={<><Text style={styles.eyebrow}>COLLECTION</Text><Text style={styles.title}>Borrow a Book</Text><TextInput value={query} onChangeText={setQuery} placeholder="Search title" placeholderTextColor="#9C887A" style={styles.search} /><Pressable onPress={cycleSort} style={styles.sort}><Text style={styles.sortText}>Sort: {sortLabel}</Text></Pressable><Text style={styles.filterLabel}>Genre</Text><Pressable onPress={() => setShowGenres((s) => !s)} style={[styles.filterSelect, showGenres && styles.filterActive]}><Text style={showGenres ? styles.filterTextActive : styles.filterText}>{category}</Text></Pressable>{showGenres ? <View style={styles.dropdown}><FlatList data={genreFilters} keyExtractor={(item) => item} contentContainerStyle={styles.filters} renderItem={({ item }) => <Pressable onPress={() => { setCategory(item); setShowGenres(false); }} style={[styles.filter, category === item && styles.filterActive]}><Text style={category === item ? styles.filterTextActive : styles.filterText}>{item}</Text></Pressable>} /> </View> : null}</>} ListEmptyComponent={<Text style={styles.empty}>No books match your search and filters.</Text>} /></SafeAreaView>;
+}
+const styles = StyleSheet.create({ container: { backgroundColor: '#FBF8F1', flex: 1 }, content: { padding: 20, paddingBottom: 40 }, eyebrow: { color: '#A65D35', fontSize: 10, fontWeight: '800', letterSpacing: 1.1 }, title: { color: '#3B2418', fontFamily: 'Georgia', fontSize: 32, marginBottom: 20, marginTop: 8 }, search: { backgroundColor: '#F1E8DB', borderRadius: 12, color: '#3B2418', height: 50, paddingHorizontal: 15 }, sort: { alignSelf: 'flex-start', backgroundColor: '#E4EEE8', borderRadius: 8, marginTop: 10, padding: 10 }, sortText: { color: '#2C3A37', fontSize: 11 }, filterLabel: { color: '#795D4B', fontSize: 10, fontWeight: '700', marginTop: 12 }, filters: { gap: 8, paddingVertical: 10 }, filter: { borderColor: '#DDCDBB', borderRadius: 18, borderWidth: 1, paddingHorizontal: 13, paddingVertical: 8 }, filterActive: { backgroundColor: '#A65D35', borderColor: '#A65D35' }, filterText: { color: '#795D4B', fontSize: 11 }, filterTextActive: { color: '#FFF', fontSize: 11 }, filterSelect: { borderColor: '#DDCDBB', borderRadius: 8, borderWidth: 1, paddingHorizontal: 13, paddingVertical: 10, alignSelf: 'flex-start' }, dropdown: { backgroundColor: '#FFFDF8', borderRadius: 8, marginTop: 8, padding: 8, borderColor: '#E9DED0', borderWidth: 1, maxHeight: 200 }, book: { alignItems: 'center', backgroundColor: '#FFFDF8', borderColor: '#E9DED0', borderRadius: 13, borderWidth: 1, flexDirection: 'row', marginBottom: 10, padding: 12 }, cover: { height: 78, justifyContent: 'space-between', padding: 8, width: 55 }, coverTitle: { color: '#FFF', fontSize: 9 }, bookInfo: { flex: 1, marginLeft: 13 }, bookTitle: { color: '#3B2418', fontSize: 14, fontWeight: '700' }, author: { color: '#856F61', fontSize: 11, marginTop: 4 }, category: { color: '#A65D35', fontSize: 9, marginTop: 6, textTransform: 'uppercase' }, available: { color: '#548263', fontSize: 10, marginTop: 6 }, unavailable: { color: '#BD7659', fontSize: 10, marginTop: 6 }, empty: { color: '#856F61', padding: 25, textAlign: 'center' },
+});

@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Library Mobile",
+    "slug": "library-mobile",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "com.library.mobile"
+    },
+    "ios": {
+      "bundleIdentifier": "com.library.mobile"
+    },
+    "plugins": [
+      "expo-sharing",
+      "@react-native-community/datetimepicker"
+    ]
+  }
+}

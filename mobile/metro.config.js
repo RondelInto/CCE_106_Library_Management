@@ -1,0 +1,7 @@
+const { getDefaultConfig } = require('expo/metro-config');
+
+/**
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
+ */
+module.exports = getDefaultConfig(__dirname);

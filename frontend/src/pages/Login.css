@@ -1,0 +1,19 @@
+.login-page { min-height: 100vh; background: #202629; color: #f5f3ee; padding: 38px 7vw 28px; display: flex; flex-direction: column; }
+.login-layout { width: min(1060px, 100%); margin: auto; display: grid; grid-template-columns: 1fr 440px; align-items: center; gap: 9vw; padding: 55px 0; }
+.login-intro h1 { color: #f5f3ee; font-size: 58px; font-weight: normal; line-height: .98; margin: 18px 0; }
+.login-intro h1 em { color: #e3aa60; font-style: italic; }
+.login-intro p { color: #aeb8b2; font: 14px/1.7 Arial, sans-serif; max-width: 330px; }
+.login-rule { display: block; width: 48px; border-top: 2px solid #e3aa60; margin-top: 37px; }
+.login-card { background: #f5f3ee; color: #25272b; padding: 42px 40px 34px; }
+.login-card h2 { font-size: 32px; font-weight: normal; margin: 14px 0 8px; }
+.login-caption { color: #777a73; font: 12px/1.65 Arial, sans-serif; margin: 0 0 28px; }
+.login-card label { display: block; color: #777a73; font: 11px Arial, sans-serif; margin: 0 0 7px; }
+.login-card input { width: 100%; border: 1px solid #d7d3ca; background: #fbfaf6; color: #25272b; padding: 12px; margin-bottom: 19px; outline: none; }
+.login-card input:focus { border-color: #b76d43; }
+.login-submit { width: 100%; margin-top: 5px; }
+.login-submit:disabled { cursor: wait; opacity: .65; }
+.login-error { background: #f5e2d8; color: #8d3e2c; font: 12px/1.5 Arial, sans-serif; padding: 10px 12px; }
+.login-footnote { border-top: 1px solid #d7d3ca; color: #898980; font: 10px/1.5 Arial, sans-serif; margin: 26px 0 0; padding-top: 16px; }
+.login-footer { color: #85908a; font: 11px Arial, sans-serif; text-align: center; }
+.role-signout { background: transparent; border: 0; color: #777a73; display: block; font: 11px Arial, sans-serif; margin: 15px auto 0; padding: 5px; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 760px) { .login-page { padding: 25px 20px; }.login-layout { grid-template-columns: 1fr; gap: 28px; padding: 38px 0; }.login-intro h1 { font-size: 44px; }.login-intro p { margin-bottom: 0; }.login-rule { margin-top: 22px; }.login-card { padding: 30px 24px; } }
